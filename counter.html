@@ -15,7 +15,11 @@
     <!-- Custom Style -->
     <style>
       .card-pink {
-        background-color: #fac5ce;
+        background-color: #f0f6de;
+      }
+      .btn-green {
+        background-color: #007bff; /* Set to blue */
+        color: white;
       }
     </style>
   </head>
@@ -26,8 +30,11 @@
         <div class="card-body text-center">
           <h1 class="card-title display-4">{{ number }}</h1>
           <p class="card-text">สวัสดีนี่คือกล่องสุ่ม</p>
-          <button @click="increment" class="btn btn-danger">
+          <button @click="increment" class="btn btn-danger me-2">
             กดสุ่ม
+          </button>
+          <button @click="reset" class="btn btn-green">
+            รีเซ็ท
           </button>
         </div>
       </div>
@@ -45,6 +52,9 @@
         methods: {
           increment() {
             this.number += 1;
+          },
+          reset() {
+            this.number = 0;
           },
         },
       });
