@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มลงทะเบียน</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- เพิ่ม Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- เพิ่ม Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --error-color: #e74a3b;
+            --background-color: #f8f9fa;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6f8ff 0%, #f1f4ff 100%);
+            font-family: 'Prompt', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1000px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a5dcc 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card-header h3 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card-body {
+            padding: 3rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e5f2;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(78,115,223,0.1);
+            transform: translateY(-1px);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            z-index: 4;
+        }
+
+        .success-icon {
+            color: var(--success-color);
+            display: none;
+        }
+
+        .was-validated .form-control:valid ~ .success-icon {
+            display: block;
+        }
+
+        .invalid-feedback {
+            font-size: 0.85rem;
+            color: var(--error-color);
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a5dcc 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 3rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(78,115,223,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78,115,223,0.4);
+        }
+
+        .form-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .form-section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(78,115,223,0.1);
+        }
+
+        .floating-label {
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 0.5rem;
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .btn-primary {
+                width: 100%;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>
+                            <i class="fas fa-user-plus me-2"></i>
+                            แบบฟอร์มลงทะเบียน
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="needs-validation" novalidate>
+                            <!-- ข้อมูลส่วนตัว -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-user me-2"></i>ข้อมูลส่วนตัว
+                                </h4>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="position-relative">
+                                            <label for="firstName" class="floating-label">ชื่อ</label>
+                                            <input type="text" class="form-control" id="firstName" 
+                                                   pattern="^[ก-์\s]{2,50}$" required>
+                                            <i class="fas fa-user input-icon"></i>
+                                            <i class="fas fa-check success-icon"></i>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i>
+                                            กรุณากรอกชื่อเป็นภาษาไทย 2-50 ตัวอักษร
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4">
+                                        <div class="position-relative">
+                                            <label for="lastName" class="floating-label">นามสกุล</label>
+                                            <input type="text" class="form-control" id="lastName" 
+                                                   pattern="^[ก-์\s]{2,50}$" required>
+                                            <i class="fas fa-user input-icon"></i>
+                                            <i class="fas fa-check success-icon"></i>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i>
+                                            กรุณากรอกนามสกุลเป็นภาษาไทย 2-50 ตัวอักษร
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ข้อมูลการติดต่อ -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-address-card me-2"></i>ข้อมูลการติดต่อ
+                                </h4>
+                                <div class="mb-4">
+                                    <div class="position-relative">
+                                        <label for="phone" class="floating-label">เบอร์โทรศัพท์</label>
+                                        <input type="tel" class="form-control" id="phone" 
+                                               pattern="^0[689]\d{8}$" required>
+                                        <i class="fas fa-phone input-icon"></i>
+                                        <i class="fas fa-check success-icon"></i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        กรุณากรอกเบอร์โทรให้ถูกต้อง (ขึ้นต้นด้วย 06, 08 หรือ 09 และมี 10 หลัก)
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="position-relative">
+                                        <label for="email" class="floating-label">อีเมล</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                        <i class="fas fa-envelope input-icon"></i>
+                                        <i class="fas fa-check success-icon"></i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        กรุณากรอกอีเมลให้ถูกต้อง (เช่น example@domain.com)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ข้อมูลประจำตัว -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-id-card me-2"></i>ข้อมูลประจำตัว
+                                </h4>
+                                <div class="mb-4">
+                                    <div class="position-relative">
+                                        <label for="studentId" class="floating-label">รหัสนักศึกษา</label>
+                                        <input type="text" class="form-control" id="studentId" 
+                                               pattern="\d{10}" required>
+                                        <i class="fas fa-graduation-cap input-icon"></i>
+                                        <i class="fas fa-check success-icon"></i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        กรุณากรอกรหัสนักศึกษา 10 หลัก
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="position-relative">
+                                        <label for="idCard" class="floating-label">เลขบัตรประจำตัวประชาชน</label>
+                                        <input type="text" class="form-control" id="idCard" 
+                                               pattern="\d{13}" required>
+                                        <i class="fas fa-id-card input-icon"></i>
+                                        <i class="fas fa-check success-icon"></i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        กรุณากรอกเลขบัตรประจำตัวประชาชน 13 หลัก
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ที่อยู่ -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-home me-2"></i>ที่อยู่
+                                </h4>
+                                <div class="mb-4">
+                                    <textarea class="form-control" id="address" rows="3" 
+                                              minlength="15" required
+                                              placeholder="กรุณากรอกที่อยู่ของคุณ"></textarea>
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        กรุณากรอกที่อยู่ (ขั้นต่ำ 15 ตัวอักษร)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    ส่งข้อมูล
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (() => {
+            'use strict';
+    
+            const forms = document.querySelectorAll('.needs-validation');
+    
+            // ฟังก์ชันตรวจสอบเลขบัตรประชาชน
+            function validateThaiID(id) {
+                if(id.length !== 13) return false;
+                let sum = 0;
+                for(let i = 0; i < 12; i++) {
+                    sum += parseInt(id.charAt(i)) * (13 - i);
+                }
+                let check = (11 - (sum % 11)) % 10;
+                return check === parseInt(id.charAt(12));
+            }
+    
+            // เพิ่ม animation เมื่อ scroll
+            function revealSections() {
+                const sections = document.querySelectorAll('.form-section');
+                sections.forEach((section, index) => {
+                    if (section.getBoundingClientRect().top < window.innerHeight) {
+                        setTimeout(() => {
+                            section.style.opacity = '1';
+                            section.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }
+            
+            
+     // ฟังก์ชันสำหรับแสดง SweetAlert
+     function showAlert() {
+        Swal.fire({
+            title: 'สำเร็จ!',
+            text: 'ข้อมูลของคุณถูกส่งเรียบร้อยแล้ว',
+            icon: 'success',
+            confirmButtonText: 'ตกลง',
+            confirmButtonColor: '#3085d6',
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
+
+    // ฟังก์ชันสำหรับล้างสถานะฟอร์ม
+    function resetForm(form) {
+        form.reset(); // รีเซ็ตค่าฟอร์ม
+        form.classList.remove('was-validated'); // ลบสถานะการตรวจสอบของฟอร์ม
+        
+        // ล้างคลาสสถานะติ๊กถูก/ติ๊กผิดในฟิลด์ทั้งหมด
+        const formControls = form.querySelectorAll('.form-control');
+        formControls.forEach(control => {
+            control.classList.remove('is-valid', 'is-invalid');
+            control.value = ''; // ลบข้อมูลที่อยู่ในฟิลด์แต่ละช่อง
+        });
+    }
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (form.checkValidity()) {
+                // แสดง SweetAlert เมื่อส่งข้อมูลสำเร็จ
+                showAlert();
+                
+                // ล้างสถานะฟอร์มและข้อมูล
+                resetForm(form);
+            } else {
+                // แสดงการแจ้งเตือนว่าฟอร์มไม่ถูกต้อง
+                form.classList.add('was-validated');
+            }
+        }, false);
+    });
+
+
+            // เพิ่ม styles สำหรับ animation
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'all 0.5s ease-out';
+            });
+    
+            // Event listeners
+            window.addEventListener('scroll', revealSections);
+            window.addEventListener('load', revealSections);
+    
+            forms.forEach(form => {
+                // Real-time validation
+                form.querySelectorAll('input, textarea').forEach(input => {
+                    // Add floating label animation
+                    input.addEventListener('focus', function() {
+                        this.closest('.position-relative')?.querySelector('.floating-label')
+                            ?.classList.add('active');
+                    });
+    
+                    input.addEventListener('blur', function() {
+                        if (!this.value) {
+                            this.closest('.position-relative')?.querySelector('.floating-label')
+                                ?.classList.remove('active');
+                        }
+                    });
+    
+                    // Real-time input validation
+                    input.addEventListener('input', function() {
+                        let isValid = true;
+                        const errorIcon = this.parentElement.querySelector('.error-icon');
+                        const successIcon = this.parentElement.querySelector('.success-icon');
+    
+                        // Phone number formatting
+                        if(this.type === 'tel') {
+                            this.value = this.value.replace(/[^\d]/g, '').slice(0, 10);
+                            isValid = /^0[689]\d{8}$/.test(this.value);
+                        }
+    
+                        // ID card formatting and validation
+                        if(this.id === 'idCard') {
+                            this.value = this.value.replace(/[^\d]/g, '').slice(0, 13);
+                            isValid = validateThaiID(this.value);
+                        }
+    
+                        // Student ID formatting
+                        if(this.id === 'studentId') {
+                            this.value = this.value.replace(/[^\d]/g, '').slice(0, 10);
+                            isValid = this.value.length === 10;
+                        }
+    
+                        // Thai name validation
+                        if(['firstName', 'lastName'].includes(this.id)) {
+                            isValid = /^[ก-์\s]{2,50}$/.test(this.value);
+                        }
+    
+                        // Email validation
+                        if(this.type === 'email') {
+                            isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+                        }
+    
+                        // Update validation state
+                        if(this.value) {
+                            if(isValid) {
+                                this.classList.add('is-valid');
+                                this.classList.remove('is-invalid');
+                                if(successIcon) successIcon.style.display = 'block';
+                                if(errorIcon) errorIcon.style.display = 'none';
+                            } else {
+                                this.classList.add('is-invalid');
+                                this.classList.remove('is-valid');
+                                if(successIcon) successIcon.style.display = 'none';
+                                if(errorIcon) errorIcon.style.display = 'block';
+                            }
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+
+    <!-- เพิ่ม style เพิ่มเติม -->
+    <style>
+        /* Animation for floating labels */
+        .floating-label.active {
+            color: var(--primary-color);
+            transform: translateY(-50%) scale(0.85);
+        }
+
+        /* Input group hover effect */
+        .form-control:hover {
+            border-color: #c2cef6;
+        }
+
+        /* Success state styling */
+        .form-control.is-valid {
+            border-color: var(--success-color);
+            background-image: none;
+        }
+
+        /* Error state styling */
+        .form-control.is-invalid {
+            border-color: var(--error-color);
+            background-image: none;
+        }
+
+        /* Animation for sections */
+        .form-section {
+            transition: all 0.5s ease-out;
+        }
+
+        /* Alert styling */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 576px) {
+            .form-section {
+                padding: 1.5rem;
+            }
+            
+            .floating-label {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</body>
+</html>
